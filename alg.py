@@ -25,28 +25,25 @@ def check_market_price(ticker):
     command = "ORDERS "+ ticker
     output = run(user, password, command)[0].rstrip().strip("\n")
     print output[0]
-    price = {}
+    price = {"BID":[], "ASK":[]}
 
     tokens = output.split(" ")
     tokens = tokens[1:]
 
+    curr_state = ""
+    curr_price = 0
+    curr_shr = 0
+
     for i in range(len(tokens)):
-        bid_price = True
-
-        curr_price = 0
-        curr_shr = 0
-
         if i % 4 == 0:
-            price["BID"] = []
-            continue
-
-        if tokens[i] =="ASK":
-            bid_price = False
-            price["ASK"] = []
-            continue
-
-
-
+            curr_state = tokens[i]
+        elif i % 4 == 2:
+            curr_price = tokens[i]
+        elif i % 4 == 3:
+            curr_shr = tokens[i]
+            price[curr_state].append((curr_price,curr_shr))
+        else:
+            pass
 
     print price
     return price
