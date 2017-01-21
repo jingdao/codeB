@@ -1,11 +1,11 @@
 import socket
 import sys
-    
+
 
 def run(user, password, *commands):
 #    HOST, PORT = "191.237.6.138", 17429
     HOST, PORT = "codebb.cloudapp.net", 17429
-    
+
     data=user + " " + password + "\n" + "\n".join(commands) + "\nCLOSE_CONNECTION\n"
 
     try:
@@ -15,16 +15,20 @@ def run(user, password, *commands):
         sock.sendall(data)
         sfile = sock.makefile()
         rline = sfile.readline()
+        output = []
         while rline:
+            output.append(rline)
             print(rline.strip())
             rline = sfile.readline()
     finally:
         sock.close()
 
+    return output
+
 def subscribe(user, password):
 #    HOST, PORT = "191.237.6.138", 17429
     HOST, PORT = "codebb.cloudapp.net", 17429
-    
+
     data=user + " " + password + "\nSUBSCRIBE\n"
 
     try:
