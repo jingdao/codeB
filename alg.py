@@ -6,25 +6,30 @@ password = "jchenxyongyshen"
 
 def bid(ticker, amount, price):
     command = "BID "+ticker+" "+ str(price) +" "+str(amount)
-    output = run(user, password, command)
-    print output
-    return output
+    run(user, password, command)
+
 
 def ask(ticker, amount, price):
     command = "ASK "+ticker+" "+ str(price) +" "+str(amount)
-    output = run(user, password, command)
-    print output
-    return output
+    run(user, password, command)
 
 def check_mine():
-    output = run(user, password,"MY_SECURITIES")
-    print output
-    return output
+    output = run(user, password, "MY_SECURITIES")[0].rstrip().strip("\n")
+    ticker = {}
+    tokens = output.split(" ")
+    tokens = tokens[1:]
+    for i in range(len(tokens)):
+        if i % 3 == 0:
+            ticker[tokens[i]] = []
+            current_ticker = tokens[i]
+        else:
+            ticker[current_ticker].append(float(tokens[i]))
+
+    return ticker
 
 def check_market_price(ticker):
     command = "ORDERS "+ ticker
     output = run(user, password, command)[0].rstrip().strip("\n")
-    print output[0]
     price = {"BID":[], "ASK":[]}
 
     tokens = output.split(" ")
@@ -74,7 +79,9 @@ def main():
     #check_mine()
 
 
-    check_market_price("QQ")
+    #check_market_price("QQ")
+
+    check_mine()
     #output = get_all_tickers_info()
     #parse_price(output)
 
