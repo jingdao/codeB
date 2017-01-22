@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+   <head>
+
+<script type="text/javascript">
+function WebSocketTest() {
+	if ("WebSocket" in window) {
+		//alert("WebSocket is supported by your Browser!");
+
+		// Let us open a web socket
+		var ws = new WebSocket("ws://localhost:9998/echo");
+
+		ws.onopen = function() {
+			// Web Socket is connected, send data using send()
+			//ws.send("Message to send");
+			//alert("Message is sent...");
+		};
+		ws.onmessage = function (evt) { 
+			var received_msg = evt.data;
+			//alert("Message is received...");
+			document.getElementById('sse').innerHTML = evt.data;
+			document.getElementById('image1').src = 'pa'+window.i+'.png';
+			document.getElementById('image2').src = 'pb'+window.i+'.png';
+			window.i += 10;
+		};
+		ws.onclose = function() { 
+			// websocket is closed.
+			//alert("Connection is closed..."); 
+		};
+	} else {
+		// The browser doesn't support WebSocket
+		alert("WebSocket NOT supported by your Browser!");
+	}
+}
+window.onload=function() {WebSocketTest();window.i=0;}
+</script>
+<style>
+table {
+	color: #333;
+	font-family: Helvetica, Arial, sans-serif;
+	/*font-family: "Lucida Console", Monaco, monospace;*/
+	width: 640px;
+	border-collapse:
+	collapse; border-spacing: 0;
+}
+
+td, th {
+	border: 1px solid transparent; /* No more visible border */
+	height: 30px;
+	transition: all 0.3s; /* Simple transition for hover effect */
+}
+
+th {
+	background: #DFDFDF; /* Darken header a bit */
+	font-weight: bold;
+}
+
+td {
+	background: #FAFAFA;
+	text-align: right;
+}
+body {
+	background: #FEFEFE;
+}
+</style>
+</head>
+<body>
+
+<div id="sse" style="float: left;">
+</div>
+<div id='right' style="float: right;">
+<image id='image1' src='pa0.png' width=550 height=300/><br>
+<image id='image2' src='pb0.png' width=550 height=300/>
+</div>
+
+</body>
+</html>
